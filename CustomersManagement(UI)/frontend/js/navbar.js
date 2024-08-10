@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded', function() {
             navbar.innerHTML = `
                 <a href="customer-list.html">Customer List</a>
                 <a href="add-customer.html">Add Customer</a>
-                <a id="profile-btn" href="#">${user.name}</a>
+                <a id="profile-btn" href="#">
+                    <img src="../images/profile-icon.png" alt="Profile Icon" class="profile-icon">
+                    ${user.name}
+                </a>
             `;
 
             const profileBtn = document.getElementById('profile-btn');
@@ -88,4 +91,3 @@ document.addEventListener('DOMContentLoaded', function() {
         document.cookie = name + '=; Max-Age=-99999999; path=/';  
     }
 });
-
