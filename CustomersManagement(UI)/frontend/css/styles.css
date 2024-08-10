@@ -42,7 +42,7 @@ body {
 
 .form-container {
     padding: 20px;
-    max-width: 500px;
+    max-width: 400px;
     margin: auto;
 }
 
@@ -55,13 +55,15 @@ body {
 }
 
 .form-container button {
-    background-color: #4f405e;
+    margin: a;
+    background-color: #6c757d;
+    width: 100%;
     color: white;
     border: none;
 }
 
 .form-container button:hover {
-    background-color: #9e70cc;
+    background-color: rgb(137, 123, 151);
 }
 
 table {

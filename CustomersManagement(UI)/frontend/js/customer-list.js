@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevPageBtn = document.getElementById('prev-page-btn');
     const nextPageBtn = document.getElementById('next-page-btn');
     const pageInfo = document.getElementById('page-info');
-    
+    const syncBtn = document.getElementById('sync-btn');
+
     let currentPage = 1;
     let totalPages = 1;
 
@@ -26,10 +27,28 @@ document.addEventListener('DOMContentLoaded', function() {
         return null;
     }
 
+    function fetchProfile() {
+        const token = getCookie('token');
+        fetch(`${BASE_URL}/auth/profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.json())
+        .then(profile => {
+            if (profile.email === 'test@sunbasedata.com') {
+                syncBtn.style.display = 'inline-block'; 
+            } else {
+                syncBtn.style.display = 'none'; 
+            }
+        })
+        .catch(error => console.error('Error fetching profile:', error));
+    }
+
     function fetchCustomers() {
         const searchValue = encodeURIComponent(searchBar.value); 
         const searchByValue = searchBy.value;
-        const sortByValue = searchByValue=="" ? "first_name"+","+sortBy.value: searchBy.value+","+sortBy.value ;
+        const sortByValue = searchByValue === "" ? "first_name," + sortBy.value : searchBy.value + "," + sortBy.value;
         const page = currentPage - 1; 
         const size = sizeInput ? sizeInput.value : 6; 
         const token = getCookie('token');
@@ -117,9 +136,10 @@ document.addEventListener('DOMContentLoaded', function() {
             row.insertCell().textContent = customer.address;
             row.insertCell().textContent = customer.street;
             const actionsCell = row.insertCell();
+            actionsCell.classList.add('actions-cell');
             actionsCell.innerHTML = `
-                <button class="edit-btn" data-uuid="${customer.uuid}">Edit</button>
-                <button class="delete-btn" data-uuid="${customer.uuid}">Delete</button>
+                <button class="edit-btn" data-uuid="${customer.uuid}"><i class="fas fa-edit"></i></button>
+                <button class="delete-btn" data-uuid="${customer.uuid}"><i class="fas fa-trash-alt"></i></button>
             `;
         });
 
@@ -139,10 +159,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => {
                     if (response.ok) {
-                        fetchCustomers(); // Refresh the list
+                        fetchCustomers(); 
                     }
                 })
                 .catch(error => console.error('Error deleting customer:', error));
+            });
+        });
+
+        document.querySelectorAll('#customer-table td').forEach(cell => {
+            cell.addEventListener('click', function(event) {
+                if (!event.target.closest('.actions-cell')) {
+                    const text = this.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        alert(`Copied: ${text}`);
+                    });
+                }
             });
         });
     }
@@ -176,7 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Initialize
-    fetchCustomers(); // Fetch customers to populate the table
+    fetchProfile();
+    fetchCustomers();
 });
-

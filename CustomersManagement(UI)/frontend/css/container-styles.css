@@ -16,6 +16,25 @@
     margin-bottom: 20px;
 }
 
+/* Styles for search and sync containers */
+.search-sort-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-sync-container {
+    display: flex;
+    gap: 10px;
+}
+
+.add-sync-container {
+    display: flex;
+    gap: 10px;
+}
+
+/* Basic form and button styles */
 select, input[type="text"], button {
     padding: 10px;
     margin-right: 10px;
@@ -30,67 +49,107 @@ input[type="text"] {
 }
 
 button {
-    background-color: #4f405e;
+    background-color: #6c757d;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #9e70cc;
+    background-color: #6c757d;
 }
 
 table {
-    width: 100%;
+    width: 90%;
+    max-width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    table-layout: fixed;
 }
 
 th, td {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
-    white-space: nowrap; /* Prevents text from wrapping */
-    overflow: hidden;    /* Hides overflowed content */
-    text-overflow: ellipsis; /* Adds ellipsis for overflowing text */
+    white-space: nowrap; 
+    overflow: hidden;   
+    text-overflow: ellipsis;
+    cursor: pointer;
 }
 
-/* Fix Column Sizes */
-th:nth-child(1), td:nth-child(1) { width: 80px; }  /* UUID */
-th:nth-child(2), td:nth-child(2) { width: 150px; } /* Name */
-th:nth-child(3), td:nth-child(3) { width: 200px; } /* Email */
-th:nth-child(4), td:nth-child(4) { width: 120px; } /* Phone */
-th:nth-child(5), td:nth-child(5) { width: 100px; } /* State */
-th:nth-child(6), td:nth-child(6) { width: 150px; } /* City */
-th:nth-child(7), td:nth-child(7) { width: 200px; } /* Address */
-th:nth-child(8), td:nth-child(8) { width: 150px; } /* Street */
-
-/* Hover Effect */
 td {
     position: relative;
 }
 
+/* Tooltip for showing full data */
 td::after {
-    content: attr(data-full); /* Display full data */
+    content: attr(data-full); 
     position: absolute;
     top: 100%;
     left: 0;
     background: #fff;
     border: 1px solid #ccc;
     padding: 5px;
-    white-space: normal; /* Allows wrapping in tooltip */
+    white-space: normal; 
     z-index: 1000;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-width: 300px; /* Adjust as needed */
-    display: none; /* Hidden by default */
+    max-width: 300px; 
+    display: none; 
+    pointer-events: none; 
 }
 
 td:hover::after {
-    display: block; /* Show on hover */
+    display: block; 
 }
 
-td:hover {
-    background-color: #f4f4f4;
+
+td.clicked {
+    background-color: #fff; 
+}
+
+td.clicked::after {
+    display: block; 
+}
+
+td.clicked {
+    position: static; 
+    max-width: none; 
+}
+
+/* Action column specific styles */
+#customer-table th:last-child,
+#customer-table td:last-child {
+    width: 140px; 
+    white-space: nowrap; 
+}
+
+.actions-cell {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.edit-btn, .delete-btn {
+    font-size: 1em; 
+    padding: 5px 10px; 
+    margin-right: 5px; 
+    border: none;
+    background-color: transparent; 
+    color: #6c757d; 
+    cursor: pointer;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+    color: #fcfbfd; 
+}
+
+.edit-btn i, .delete-btn {
+    font-size: 1.2em;
+}
+
+
+button {
+    white-space: nowrap;
 }
 
 #pagination {
