@@ -7,17 +7,16 @@ A robust web-based Customer Management System that enables efficient handling of
 - **User Authentication**: 
   - **Signup**: Register new users.
   - **Login**: Secure login with JWT tokens.
-  - **Profile Management**: View and update user profile details.
+  - **Profile Management**: View user profile details.
 
 - **Customer Management**:
   - **Add Customer**: Enter new customer details.
   - **Edit Customer**: Modify existing customer information.
-  - **Sync Customer Data**: Synchronize customer data with an external API.
+  - **Delete**: Delete existing customer.
+  - **Sync Customer Data**: Synchronize customer data with an external/remote API.
 
 - **User Role-Based Access**:
   - Sync functionality is restricted to users with a specific email address.
-
-- **Responsive Design**: Adaptable interface for various screen sizes and devices.
 
 ## Technologies Used
 
@@ -28,8 +27,11 @@ A robust web-based Customer Management System that enables efficient handling of
 
 - **Backend**:
   - Spring Boot (Java) for managing customer data and user authentication
+  
+- **Database**:
+  - MySQL- for storing customer data and user credential
 
-- **External API**:
+- **Remote API**:
   - API for customer data retrieval and synchronization
 
 ## Getting Started
@@ -44,8 +46,7 @@ A robust web-based Customer Management System that enables efficient handling of
 1. **Clone the Repository**
 
     ```bash
-    git clone https://github.com/your-username/your-repository.git
-    cd your-repository
+    git clone https://github.com/RADHIKESHS/sun-base-Assignment.git
     ```
 
 2. **Install Dependencies**
@@ -60,7 +61,7 @@ A robust web-based Customer Management System that enables efficient handling of
     - Add the following configuration:
 
     ```javascript
-    export const BASE_URL = 'https://your-backend-url.com'; // Update with your backend URL
+    export const BASE_URL = 'localhost:8080/api';
     ```
 
 4. **Run the Application**
@@ -75,23 +76,34 @@ A robust web-based Customer Management System that enables efficient handling of
 
     - Navigate to `login.html`.
     - Enter your credentials and submit the form.
+    
+    ![Login Page](images/login.png)
 
 2. **Signup**
 
     - Navigate to `signup.html`.
     - Complete the registration form and submit.
 
+    ![Signup Page](images/signup.png)
+
 ### Customer Management
 
-1. **Add Customer**
+1. **View Customers**
 
-    - Go to `add-customer.html`.
+    - Go to `customer-list.html`.
+    - View customer details and click on any feild to copy.
+
+    ![View Customer Page](images/add-customer.png)
+
+   
+2. **Add Customer / Update Customer**
+
+    - Go to `add-customer.html` / `update-customer.html`.
     - Fill out the form with customer details and submit.
+    - Edit the form of Existing customer details and submit.
 
-2. **Edit Customer**
+    ![Add Customer Page](images/add-customer.png)
 
-    - Visit `edit-customer.html` with a customer UUID parameter.
-    - Modify customer details and save changes.
 
 ### Sync Customer Data
 
@@ -174,18 +186,4 @@ A robust web-based Customer Management System that enables efficient handling of
   - `POST /customers/bulk-upload`
   - **Headers**: `Authorization: Bearer <token>`
   - **Request Body**: Array of customer objects
-
-## Contributing
-
-We welcome contributions to improve this project! To contribute:
-
-1. **Fork the Repository**
-2. **Create a Feature Branch**: `git checkout -b feature/your-feature`
-3. **Commit Your Changes**: `git commit -am 'Add new feature'`
-4. **Push to the Branch**: `git push origin feature/your-feature`
-5. **Open a Pull Request**
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
