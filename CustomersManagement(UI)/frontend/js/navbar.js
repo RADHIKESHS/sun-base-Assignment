@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <a href="customer-list.html">Customer List</a>
                 <a href="add-customer.html">Add Customer</a>
                 <a id="profile-btn" href="#">
-                    <img src="../images/profile-icon.png" alt="Profile Icon" class="profile-icon">
+                    <img src="./images/profile-icon.png" alt="Profile Icon" class="profile-icon">
                     ${user.name}
                 </a>
             `;
