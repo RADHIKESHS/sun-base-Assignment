@@ -77,14 +77,14 @@ A robust web-based Customer Management System that enables efficient handling of
     - Navigate to `login.html`.
     - Enter your credentials and submit the form.
     
-    ![Login Page](images/login.png)
+    ![Login Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/login.png?raw=true)
 
 2. **Signup**
 
     - Navigate to `signup.html`.
     - Complete the registration form and submit.
 
-    ![Signup Page](images/signup.png)
+    ![Signup Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/signup.png?raw=true)
 
 ### Customer Management
 
@@ -93,7 +93,7 @@ A robust web-based Customer Management System that enables efficient handling of
     - Go to `customer-list.html`.
     - View customer details and click on any feild to copy.
 
-    ![View Customer Page](images/add-customer.png)
+    ![View Customer Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/Customer-list.png?raw=true)
 
    
 2. **Add Customer / Update Customer**
@@ -102,7 +102,7 @@ A robust web-based Customer Management System that enables efficient handling of
     - Fill out the form with customer details and submit.
     - Edit the form of Existing customer details and submit.
 
-    ![Add Customer Page](images/add-customer.png)
+    ![Add Customer Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/add-customer.png?raw=true)
 
 
 ### Sync Customer Data
