@@ -49,13 +49,7 @@ A robust web-based Customer Management System that enables efficient handling of
     git clone https://github.com/RADHIKESHS/sun-base-Assignment.git
     ```
 
-2. **Install Dependencies**
-
-    ```bash
-    npm install
-    ```
-
-3. **Configuration**
+2. **Configuration**
 
     - Create a `config.js` file in the `src` directory.
     - Add the following configuration:
@@ -64,7 +58,7 @@ A robust web-based Customer Management System that enables efficient handling of
     export const BASE_URL = 'localhost:8080/api';
     ```
 
-4. **Run the Application**
+3. **Run the Application**
 
     - Open `index.html` in your web browser.
 
