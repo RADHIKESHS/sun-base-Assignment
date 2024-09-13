@@ -35,7 +35,6 @@ public class ManualUserDetailsService implements UserDetailsService {
         }
         Users us = user.get();
         
-//        System.out.println("hello,I am in manualuserdetails"+ us);
         
         List<GrantedAuthority> authorities = new ArrayList<>();
         SimpleGrantedAuthority autho = new SimpleGrantedAuthority("ROLE_" + us.getRole());

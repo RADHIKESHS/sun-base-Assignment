@@ -1,30 +1,28 @@
 package com.sunBase.CustomersManagement.service;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.sunBase.CustomersManagement.exceptions.ResourceNotFoundException;
 import com.sunBase.CustomersManagement.model.Customer;
 import com.sunBase.CustomersManagement.repository.CustomerRepository;
-
 import jakarta.transaction.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
 
     @Autowired
-    private CustomerRepository repository;
+    private CustomerRepository repository; 
 
     public Customer createCustomer(Customer customer) {
         // Generate UUID if not provided
         if (customer.getUuid() == null) {
-            customer.setUuid(generateUniqueUuid());
+            customer.setUuid(generateCustomUuid());
         }
         return repository.save(customer);
     }
@@ -48,7 +46,7 @@ public class CustomerService {
             } else {
                 // Generate UUID if not provided
                 if (customer.getUuid() == null) {
-                    customer.setUuid(generateUniqueUuid());
+                    customer.setUuid(generateCustomUuid());
                 }
                 return repository.save(customer);
             }
@@ -76,7 +74,7 @@ public class CustomerService {
 
     public Page<Customer> listCustomers(String search, String searchBy, Pageable pageable) {
         switch (searchBy.toLowerCase()) {
-            case "name":
+            case "first_name":
                 return repository.searchByFirstName(search, pageable);
             case "email":
                 return repository.findByEmailContainingIgnoreCase(search, pageable);
@@ -85,10 +83,10 @@ public class CustomerService {
             case "city":
                 return repository.findByCityContainingIgnoreCase(search, pageable);
             default:
-                // Default behavior if searchBy is invalid
-                return repository.searchByFirstName(search, pageable);
+                return repository.searchByFirstName(search, pageable); // Default behavior
         }
     }
+
 
     @Transactional
     public void deleteCustomer(String uuid) {
@@ -96,11 +94,22 @@ public class CustomerService {
         repository.delete(customer);
     }
 
-    private String generateUniqueUuid() {
-        String uuid;
-        do {
-            uuid = UUID.randomUUID().toString();
-        } while (repository.existsByUuid(uuid)); // Ensure uniqueness
-        return uuid;
+    private String generateCustomUuid() {
+        // Generate a random UUID and remove hyphens to match the format
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+
+        // Ensure the length is exactly 32 characters
+        if (uuid.length() != 32) {
+            throw new IllegalStateException("Generated UUID is not 32 characters long.");
+        }
+
+        // Prefix with "test" to match the required format
+        return "test" + uuid;
+    }
+
+    public Page<Customer> listAllCustomers(Pageable pageable) {
+    	System.out.println("in side listAllCustomers :"+pageable.toString());
+        return repository.findAll(pageable);
     }
 }
+

@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if user is already logged in
     const token = getCookie('token');
     if (token) {
-        window.location.href = 'customer-list.html';
+        window.location.href = 'index.html';
     }
 
     loginForm.addEventListener('submit', function(event) {
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 const token = response.headers.get('Authorization').split(' ')[1];
                 setCookie('token', token, 7);
-                window.location.href = 'customer-list.html';
+                window.location.href = 'index.html';
             } else {
                 return response.text();
             }

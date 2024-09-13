@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const uuid = urlParams.get('uuid');
 
-    fetch(`${BASE_URL}/customers/${uuid}`, {
+    fetch(`${BASE_URL}/get-customer/${uuid}`, {
         headers: {
             'Authorization': `Bearer ${getCookie('token')}`
         }
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value;
         const phone = document.getElementById('phone').value;
 
-        fetch(`${BASE_URL}/customers/${uuid}`, {
+        fetch(`${BASE_URL}/update-customer/${uuid}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => {
             if (response.ok) {
                 alert('Customer updated successfully!');
-                window.location.href = 'customer-list.html';
+                window.location.href = 'index.html';
             }
         });
     });
