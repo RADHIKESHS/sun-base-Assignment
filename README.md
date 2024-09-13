@@ -49,7 +49,13 @@ A robust web-based Customer Management System that enables efficient handling of
     git clone https://github.com/RADHIKESHS/sun-base-Assignment.git
     ```
 
-2. **Configuration**
+2. **Install Dependencies**
+
+    ```bash
+    npm install
+    ```
+
+3. **Configuration**
 
     - Create a `config.js` file in the `src` directory.
     - Add the following configuration:
@@ -58,7 +64,7 @@ A robust web-based Customer Management System that enables efficient handling of
     export const BASE_URL = 'localhost:8080/api';
     ```
 
-3. **Run the Application**
+4. **Run the Application**
 
     - Open `index.html` in your web browser.
 
@@ -71,14 +77,14 @@ A robust web-based Customer Management System that enables efficient handling of
     - Navigate to `login.html`.
     - Enter your credentials and submit the form.
     
-    ![Login Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/login.png?raw=true)
+    ![Login Page](images/login.png)
 
 2. **Signup**
 
     - Navigate to `signup.html`.
     - Complete the registration form and submit.
 
-    ![Signup Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/signup.png?raw=true)
+    ![Signup Page](images/signup.png)
 
 ### Customer Management
 
@@ -87,7 +93,7 @@ A robust web-based Customer Management System that enables efficient handling of
     - Go to `customer-list.html`.
     - View customer details and click on any feild to copy.
 
-    ![View Customer Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/Customer-list.png?raw=true)
+    ![View Customer Page](images/add-customer.png)
 
    
 2. **Add Customer / Update Customer**
@@ -96,7 +102,7 @@ A robust web-based Customer Management System that enables efficient handling of
     - Fill out the form with customer details and submit.
     - Edit the form of Existing customer details and submit.
 
-    ![Add Customer Page](https://github.com/RADHIKESHS/sun-base-Assignment/blob/main/add-customer.png?raw=true)
+    ![Add Customer Page](images/add-customer.png)
 
 
 ### Sync Customer Data

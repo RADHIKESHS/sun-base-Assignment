@@ -20,8 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(user => {
             navbar.innerHTML = `
-                <a href="customer-list.html">Customer List</a>
-                <a href="add-customer.html">Add Customer</a>
+                <a id="company-logo" href="index.html">
+                    <img src="./images/sunbase-logo.webp" alt="Company Logo" class="company-logo">
+                </a>
                 <a id="profile-btn" href="#">
                     <img src="./images/profile-icon.png" alt="Profile Icon" class="profile-icon">
                     ${user.name}
@@ -70,8 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(err => console.error('Error fetching profile:', err));
     } else {
         navbar.innerHTML = `
-            <a href="customer-list.html">Customer List</a>
-            <a href="add-customer.html">Add Customer</a>
+            <a id="company-logo" href="index.html">
+                <img src="./images/sunbase-logo.webp" alt="Company Logo" class="company-logo">
+            </a>
             <a id="login-link" href="login.html">Login</a>
         `;
     }

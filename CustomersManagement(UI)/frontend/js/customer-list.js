@@ -1,3 +1,4 @@
+
 import { BASE_URL } from './config.js';
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -36,24 +37,23 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(profile => {
-            if (profile.email === 'test@sunbasedata.com') {
-                syncBtn.style.display = 'inline-block'; 
-            } else {
-                syncBtn.style.display = 'none'; 
-            }
+            // Sync button should be visible for all users
+            syncBtn.style.display = 'inline-block';
         })
         .catch(error => console.error('Error fetching profile:', error));
     }
 
     function fetchCustomers() {
         const searchValue = encodeURIComponent(searchBar.value); 
-        const searchByValue = searchBy.value;
-        const sortByValue = searchByValue === "" ? "first_name," + sortBy.value : searchBy.value + "," + sortBy.value;
-        const page = currentPage - 1; 
-        const size = sizeInput ? sizeInput.value : 6; 
+        const searchByValue = searchBy.value ? searchBy.value : "first_name"; 
+        const sortDirection = sortBy.value || "asc";  
+        const page = currentPage - 1;  
+        const size = sizeInput ? sizeInput.value : 6;  
         const token = getCookie('token');
 
-        fetch(`${BASE_URL}/customers?search=${searchValue}&searchBy=${searchByValue}&sort=${sortByValue}&page=${page}&size=${size}`, {
+        const apiUrl = `${BASE_URL}/get-all-customers?search=${searchValue}&searchBy=${searchByValue}&page=${page}&size=${size}&sortDirection=${sortDirection}`;
+    
+        fetch(apiUrl, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -61,20 +61,21 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.content.length === 0 && currentPage > 1) {
-                // If current page is empty, adjust to previous page
                 currentPage--;
                 fetchCustomers();
                 return;
             }
-            populateTable(data.content);
-            totalPages = data.totalPages;
-            currentPage = data.number + 1; 
-            updatePagination();
-            prevPageBtn.disabled = data.first;
-            nextPageBtn.disabled = data.last;
+    
+            populateTable(data.content);  
+            totalPages = data.totalPages; 
+            currentPage = data.number + 1;  
+            updatePagination();  
+            prevPageBtn.disabled = data.first;  
+            nextPageBtn.disabled = data.last;  
         })
         .catch(error => console.error('Error fetching customers:', error));
     }
+    
 
     function updatePagination() {
         pageInfo.innerHTML = ''; 
@@ -144,14 +145,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent cell click event
                 window.location.href = `edit-customer.html?uuid=${this.dataset.uuid}`;
             });
         });
 
         document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                fetch(`${BASE_URL}/customers/${this.dataset.uuid}`, {
+            btn.addEventListener('click', function(event) {
+                event.stopPropagation(); // Prevent cell click event
+                const customerName = this.closest('tr').querySelector('td:nth-child(2)').textContent; // Assumes name is in the second column
+                fetch(`${BASE_URL}/delete-customer/${this.dataset.uuid}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${getCookie('token')}`
@@ -160,6 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         fetchCustomers(); 
+                        alert(`${customerName} deleted successfully`);
                     }
                 })
                 .catch(error => console.error('Error deleting customer:', error));
@@ -167,8 +172,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         document.querySelectorAll('#customer-table td').forEach(cell => {
-            cell.addEventListener('click', function(event) {
-                if (!event.target.closest('.actions-cell')) {
+            cell.addEventListener('click', function() {
+                // Only copy if the cell is not within the actions column
+                if (!this.closest('tr').querySelector('.actions-cell').contains(this)) {
                     const text = this.textContent;
                     navigator.clipboard.writeText(text).then(() => {
                         alert(`Copied: ${text}`);
@@ -198,6 +204,24 @@ document.addEventListener('DOMContentLoaded', function() {
             currentPage++;
             fetchCustomers();
         }
+    });
+
+    syncBtn.addEventListener('click', function() {
+        fetch(`${BASE_URL}/remoteApi-getCustomers/sync`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${getCookie('token')}`
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Sync successful');
+                fetchCustomers(); // Refresh data after sync
+            } else {
+                alert('Sync failed');
+            }
+        })
+        .catch(error => console.error('Error syncing customers:', error));
     });
 
     if (logoutBtn) {
