@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 package com.sunBase.CustomersManagement.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,3 +114,120 @@ public class CustomerService {
     }
 }
 
+=======
+package com.sunBase.CustomersManagement.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import com.sunBase.CustomersManagement.exceptions.ResourceNotFoundException;
+import com.sunBase.CustomersManagement.model.Customer;
+import com.sunBase.CustomersManagement.repository.CustomerRepository;
+import jakarta.transaction.Transactional;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+public class CustomerService {
+
+    @Autowired
+    private CustomerRepository repository; 
+
+    public Customer createCustomer(Customer customer) {
+        // Generate UUID if not provided
+        if (customer.getUuid() == null) {
+            customer.setUuid(generateCustomUuid());
+        }
+        return repository.save(customer);
+    }
+
+    @Transactional
+    public List<Customer> bulkUpsertCustomers(List<Customer> customers) {
+        return customers.stream().map(customer -> {
+            if (customer.getUuid() != null && repository.existsByUuid(customer.getUuid())) {
+                // Update existing customer
+                Customer existingCustomer = repository.findByUuid(customer.getUuid())
+                        .orElseThrow(() -> new ResourceNotFoundException("Customer not found with UUID " + customer.getUuid()));
+                existingCustomer.setFirst_name(customer.getFirst_name());
+                existingCustomer.setLast_name(customer.getLast_name());
+                existingCustomer.setStreet(customer.getStreet());
+                existingCustomer.setAddress(customer.getAddress());
+                existingCustomer.setCity(customer.getCity());
+                existingCustomer.setState(customer.getState());
+                existingCustomer.setEmail(customer.getEmail());
+                existingCustomer.setPhone(customer.getPhone());
+                return repository.save(existingCustomer);
+            } else {
+                // Generate UUID if not provided
+                if (customer.getUuid() == null) {
+                    customer.setUuid(generateCustomUuid());
+                }
+                return repository.save(customer);
+            }
+        }).collect(Collectors.toList());
+    }
+
+    public Customer updateCustomer(String uuid, Customer customer) {
+        Customer existingCustomer = repository.findByUuid(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with UUID " + uuid));
+        existingCustomer.setFirst_name(customer.getFirst_name());
+        existingCustomer.setLast_name(customer.getLast_name());
+        existingCustomer.setStreet(customer.getStreet());
+        existingCustomer.setAddress(customer.getAddress());
+        existingCustomer.setCity(customer.getCity());
+        existingCustomer.setState(customer.getState());
+        existingCustomer.setEmail(customer.getEmail());
+        existingCustomer.setPhone(customer.getPhone());
+        return repository.save(existingCustomer);
+    }
+
+    public Customer getCustomerByUuid(String uuid) {
+        return repository.findByUuid(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with UUID " + uuid));
+    }
+
+    public Page<Customer> listCustomers(String search, String searchBy, Pageable pageable) {
+        switch (searchBy.toLowerCase()) {
+            case "first_name":
+                return repository.searchByFirstName(search, pageable);
+            case "email":
+                return repository.findByEmailContainingIgnoreCase(search, pageable);
+            case "phone":
+                return repository.findByPhoneContainingIgnoreCase(search, pageable);
+            case "city":
+                return repository.findByCityContainingIgnoreCase(search, pageable);
+            default:
+                return repository.searchByFirstName(search, pageable); // Default behavior
+        }
+    }
+
+
+    @Transactional
+    public void deleteCustomer(String uuid) {
+        Customer customer = repository.findByUuid(uuid).orElseThrow(() -> new ResourceNotFoundException("Customer not found with uuid " + uuid));
+        repository.delete(customer);
+    }
+
+    private String generateCustomUuid() {
+        // Generate a random UUID and remove hyphens to match the format
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+
+        // Ensure the length is exactly 32 characters
+        if (uuid.length() != 32) {
+            throw new IllegalStateException("Generated UUID is not 32 characters long.");
+        }
+
+        // Prefix with "test" to match the required format
+        return "test" + uuid;
+    }
+
+    public Page<Customer> listAllCustomers(Pageable pageable) {
+    	System.out.println("in side listAllCustomers :"+pageable.toString());
+        return repository.findAll(pageable);
+    }
+}
+
+>>>>>>> 8532374ded0a8be6e32fcf0c01e928a81baf522d
