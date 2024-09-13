@@ -28,12 +28,6 @@ public class RemoteApiService {
     @Value("${remote.api.customers.url}")
     private String customersUrl;
 
-    @Value("${remote.api.auth.credential.login_id}")
-    private String loginId;
-
-    @Value("${remote.api.auth.credential.password}")
-    private String password;
-
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -52,6 +46,8 @@ public class RemoteApiService {
     }
 
     private String authenticate() {
+    	String loginId="test@sunbasedata.com";
+    	String password="Test@123";
         String authBody = String.format("{\"login_id\": \"%s\", \"password\": \"%s\"}", loginId, password);
 
         // Call authentication API
