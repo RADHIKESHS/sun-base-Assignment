@@ -1,6 +1,10 @@
 package com.sunBase.CustomersManagement.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,9 +66,11 @@ public class AuthController {
 
             response.setHeader(SecurityDetails.JWT_HEADER, "Bearer " + jwt);
             
-            
+            Map<String, String> responseBody = new HashMap<>();
+            responseBody.put("message", "Login successful");
+            responseBody.put("token", jwt);
 
-            return ResponseEntity.ok("Login successful");
+            return ResponseEntity.ok(responseBody);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
