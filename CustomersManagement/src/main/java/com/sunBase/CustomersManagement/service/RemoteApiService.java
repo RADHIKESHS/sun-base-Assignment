@@ -48,13 +48,14 @@ public class RemoteApiService {
     private String authenticate() {
     	String loginId="test@sunbasedata.com";
     	String password="Test@123";
+    	
         String authBody = String.format("{\"login_id\": \"%s\", \"password\": \"%s\"}", loginId, password);
 
         // Call authentication API
         String response = restTemplate.postForObject(authUrl, authBody, String.class);
 
         // Parse the access token from the response
-        return response;  // Extract the token from response as needed
+        return response;  
     }
 
     private List<Customer> fetchCustomers(String token) {
@@ -76,7 +77,6 @@ public class RemoteApiService {
     }
 
     private void bulkUpsertCustomers(List<Customer> customers) {
-        // Upsert logic (similar to CustomerService's bulkUpsertCustomers method)
         customers.forEach(customer -> {
             if (customer.getUuid() != null && customerRepository.existsByUuid(customer.getUuid())) {
                 // Update existing customer
@@ -105,7 +105,6 @@ public class RemoteApiService {
         // Generate a random UUID and remove hyphens to match the format
         String uuid = UUID.randomUUID().toString().replace("-", "");
 
-        // Ensure the length is exactly 32 characters
         if (uuid.length() != 32) {
             throw new IllegalStateException("Generated UUID is not 32 characters long.");
         }
