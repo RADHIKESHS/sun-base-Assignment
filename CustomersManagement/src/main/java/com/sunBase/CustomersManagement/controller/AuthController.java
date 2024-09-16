@@ -54,27 +54,34 @@ public class AuthController {
         	return new ResponseEntity<>(saveduser, HttpStatus.CREATED);
         }
     }
-
+    
     @PostMapping("/login")
     public ResponseEntity<?> logInUserHandler(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         try {
+            // Authenticate the user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
 
+            // Generate the JWT token
             String jwt = JwtToken.generateToken(loginRequest.getUsername(), authentication.getAuthorities());
 
             response.setHeader(SecurityDetails.JWT_HEADER, "Bearer " + jwt);
             
             Map<String, String> responseBody = new HashMap<>();
             responseBody.put("message", "Login successful");
-            responseBody.put("token", jwt);
+            responseBody.put("token", jwt);  
 
             return ResponseEntity.ok(responseBody);
+            
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            Map<String, String> errorBody = new HashMap<>();
+            errorBody.put("message", "Invalid credentials");
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorBody);
         }
     }
+
     
     
     @PostMapping("/logout")

@@ -74,6 +74,7 @@ public class GlobalExceptionsHandler {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), "An error occurred", ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
 
     private String extractUniqueConstraintErrorMessage(DataIntegrityViolationException ex) {
         Throwable cause = ex.getMostSpecificCause();

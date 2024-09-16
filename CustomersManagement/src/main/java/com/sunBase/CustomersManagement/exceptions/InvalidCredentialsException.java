@@ -16,5 +16,9 @@ public class InvalidCredentialsException extends RuntimeException {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
+	
+    public InvalidCredentialsException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

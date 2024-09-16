@@ -9,16 +9,34 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
+    // Function to set the navbar for logged-out users
+    function setLoggedOutNavbar() {
+        navbar.innerHTML = `
+            <a id="company-logo" href="index.html">
+                <img src="./images/sunbase-logo.webp" alt="Company Logo" class="company-logo">
+            </a>
+            <a id="login-link" href="login.html">Login</a>
+        `;
+    }
+
     // Check if user is logged in and update the navbar accordingly
     const token = getCookie('token');
+    
     if (token) {
         fetch(`${BASE_URL}/auth/profile`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                // If response is not ok, meaning unauthorized or token invalid, set logged-out navbar
+                throw new Error('Unauthorized');
+            }
+            return response.json();
+        })
         .then(user => {
+            // Update the navbar to show the user's profile if authenticated
             navbar.innerHTML = `
                 <a id="company-logo" href="index.html">
                     <img src="./images/sunbase-logo.webp" alt="Company Logo" class="company-logo">
@@ -29,12 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </a>
             `;
 
+            // Profile modal and logout functionality
             const profileBtn = document.getElementById('profile-btn');
-            if (!profileBtn) {
-                console.error('Profile button not found');
-                return;
-            }
-
             const profileModal = document.createElement('div');
             profileModal.id = 'profile-modal';
             profileModal.innerHTML = `
@@ -56,9 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             document.getElementById('logout-btn').addEventListener('click', function() {
-                console.log('Logout button clicked');
                 eraseCookie('token');
-                console.log('Token erased');
                 window.location.href = 'login.html';
             });
 
@@ -68,16 +80,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         })
-        .catch(err => console.error('Error fetching profile:', err));
+        .catch(err => {
+            console.error('Error fetching profile:', err);
+            setLoggedOutNavbar(); // Show login link in case of error or invalid token
+        });
     } else {
-        navbar.innerHTML = `
-            <a id="company-logo" href="index.html">
-                <img src="./images/sunbase-logo.webp" alt="Company Logo" class="company-logo">
-            </a>
-            <a id="login-link" href="login.html">Login</a>
-        `;
+        setLoggedOutNavbar(); // Show login link if token is not present
     }
 
+    // Function to get a cookie value
     function getCookie(name) {
         let nameEQ = name + "=";
         let ca = document.cookie.split(';');
@@ -89,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return null;
     }
 
+    // Function to erase a cookie
     function eraseCookie(name) {   
         document.cookie = name + '=; Max-Age=-99999999; path=/';  
     }

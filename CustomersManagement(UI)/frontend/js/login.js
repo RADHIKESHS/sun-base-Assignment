@@ -1,18 +1,20 @@
+import { BASE_URL } from './config.js'; 
 
-import { BASE_URL } from './config.js'; // Import the base URL
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const loginForm = document.getElementById('login-form');
 
-    // Check if user is already logged in
     const token = getCookie('token');
     if (token) {
-        window.location.href = 'index.html';
+        validateToken(token).then(isValid => {
+            if (isValid) {
+                window.location.href = 'index.html';
+            }
+        });
     }
 
-    loginForm.addEventListener('submit', function(event) {
+    loginForm.addEventListener('submit', function (event) {
         event.preventDefault();
-        
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
@@ -25,11 +27,18 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (response.ok) {
-                const token = response.headers.get('Authorization').split(' ')[1];
-                setCookie('token', token, 7);
-                window.location.href = 'index.html';
+                const token = response.headers.get('Authorization') 
+                    ? response.headers.get('Authorization').split(' ')[1] 
+                    : null;
+
+                if (token) {
+                    setCookie('token', token, 7); 
+                    window.location.href = 'index.html'; 
+                } else {
+                    throw new Error('Token not found in response');
+                }
             } else {
-                return response.text();
+                return response.text(); 
             }
         })
         .then(message => {
@@ -42,6 +51,16 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred while trying to log in.');
         });
     });
+
+    function validateToken(token) {
+        return fetch(`${BASE_URL}/auth/profile`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => response.ok) 
+        .catch(() => false);
+    }
 
     function setCookie(name, value, days) {
         const d = new Date();
